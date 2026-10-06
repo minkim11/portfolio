@@ -354,6 +354,10 @@
     .dialog-close:hover { color: var(--muted); }
     .dialog-close:focus-visible { outline: 1px solid var(--line); outline-offset: 2px; }
     .dialog-project-meta { margin: 18px 0 0; color: var(--muted); font-size: .9rem; }
+    .dialog-project-stack { margin: 7px 0 0; color: var(--muted); font-size: .88rem; }
+    .dialog-visual { margin: 22px 0 0; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    .dialog-visual img { display: block; width: 100%; max-height: min(52vh, 440px); object-fit: contain; }
+    .dialog-visual figcaption { color: var(--muted); }
     .detail-section { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--line); }
     .detail-section > h3 { margin-bottom: 16px; font-size: 1.25rem; }
     .detail-section > p { color: var(--muted); }
@@ -440,6 +444,8 @@
     <div class="project-dialog-content">
     <div class="dialog-head"><div><span class="kicker">LOCAL STAMP</span><h2 id="localstamp-title">로컬스탬프</h2></div><form method="dialog"><button class="dialog-close" aria-label="상세 팝업 닫기">×</button></form></div>
     <p class="dialog-project-meta">26.07–26.08 · 6주 · 4인 · 지역 행사 예약 서비스</p>
+    <p class="dialog-project-stack">Java · Spring Boot · Spring Security · JPA · MySQL</p>
+    <figure class="dialog-visual"><img src="assets/localstamp-auth.png" alt="방문자·운영자 회원가입과 로그인 화면"><figcaption>회원가입 및 로그인 화면</figcaption></figure>
     <section class="detail-section"><h3>담당 범위와 접근 흐름</h3><p>인증·회원, 쿠폰, 행사 운영자 도메인을 담당했습니다. 지역 관리자에게 담당 지역의 요청만 허용하고, 행사 운영자는 본인이 등록한 데이터만 관리하도록 했습니다. 비활성 계정의 요청도 거부합니다.</p><div class="nodes"><span class="node">Access Token</span><span class="arrow">→</span><span class="node mine">역할 확인</span><span class="arrow">→</span><span class="node mine">DB 상태 확인</span><span class="arrow">→</span><span class="node">기능 실행</span></div></section>
     <section class="detail-section"><h3>문제와 선택</h3><article class="card api-card"><h4>사용자 역할 검사와 데이터 접근 검사 분리</h4><dl class="api-grid"><dt>요구사항</dt><dd>사용자 역할과 관리자 담당 지역·계정 상태에 따라 접근을 제한</dd><dt>각 API별 검사</dt><dd>각 기능에서 역할을 직접 검사하면 여러 API에 같은 코드가 반복됨</dd><dt>스프링 필터 검사</dt><dd>요청 경로별 역할 검사를 필터 한곳에서 공통으로 적용</dd><dt>결정</dt><dd>공통 역할 검사는 필터에 모으고 담당 지역과 계정 상태는 각 기능에서 DB로 확인</dd></dl></article><div class="proof"><strong>선택 과정</strong><div class="proof-copy"><p>여러 API에서 반복되는 역할 검사 코드를 줄이기 위해 Spring Security 필터에 검사를 모았습니다. 권한이 없는 요청은 서비스 로직을 호출하기 전에 거부하므로 불필요한 서비스 호출도 줄일 수 있다고 판단했습니다.</p><p>담당 지역은 토큰에 담고 토큰 발급·재발급 때 조회하는 방식도 고려했습니다. 다만 운영 데이터가 없어 토큰 재발급 요청 수와 API 호출 수를 바탕으로 실제 DB 조회 감소 폭을 비교하기 어려웠습니다.</p><p>효과가 확인되지 않은 상태에서 기존 지역 검사 API들을 수정하고 재검증하는 비용이 커 전환하지 않았습니다. 따라서 담당 지역과 계정 상태는 각 기능에서 DB로 확인하는 방식을 유지했습니다.</p></div></div></section>
     <section class="detail-section"><h3>구현과 결과</h3><div class="case-grid">
@@ -456,6 +462,8 @@
     <div class="project-dialog-content">
     <div class="dialog-head"><div><span class="kicker">GIFBOTTARY</span><h2 id="gifbottary-title">gifbottary</h2></div><form method="dialog"><button class="dialog-close" aria-label="상세 팝업 닫기">×</button></form></div>
     <p class="dialog-project-meta">26.06–26.07 · 2주 · 4인 · 기프티콘 거래 서비스</p>
+    <p class="dialog-project-stack">Java · Spring Boot · WebSocket · STOMP · Redis · MySQL</p>
+    <figure class="dialog-visual"><img src="assets/gifbottary-chat-8080-8081.png" alt="8080과 8081 서버에 접속한 판매자와 구매자의 실시간 채팅 화면"><figcaption>서로 다른 서버의 판매자와 구매자가 주고받는 채팅 메시지</figcaption></figure>
     <section class="detail-section"><h3>담당 범위와 메시지 흐름</h3><p>실시간 채팅과 쿠폰 도메인을 담당했습니다. 서로 다른 서버에 접속한 판매자와 구매자가 메시지를 주고받을 수 있도록 했습니다.</p><div class="nodes"><span class="node">메시지 전송</span><span class="arrow">→</span><span class="node mine">DB 저장</span><span class="arrow">→</span><span class="node mine">Redis 발행</span><span class="arrow">→</span><span class="node">실시간 수신</span></div></section>
     <section class="detail-section"><h3>문제와 선택</h3><article class="card api-card"><h4>WebSocket/STOMP에 Redis Pub/Sub을 추가한 이유</h4><dl class="api-grid"><dt>기존 구현</dt><dd>WebSocket/STOMP와 Spring의 Simple Broker로 실시간 채팅 전달</dd><dt>확장 한계</dt><dd>Simple Broker는 다른 서버에 연결된 사용자에게 메시지를 전달하지 못함</dd><dt>Redis 추가</dt><dd>각 서버가 같은 Redis 채널을 구독해 메시지를 받은 뒤 연결된 사용자에게 전달</dd><dt>남은 문제</dt><dd>Pub/Sub만으로는 접속이 끊긴 동안 받지 못한 메시지를 다시 조회할 수 없음</dd></dl></article><div class="proof"><strong>선택 과정</strong><div class="proof-copy"><p>처음에는 WebSocket/STOMP와 Spring의 Simple Broker로 채팅을 구현했습니다. 여러 서버에서도 대화할 수 있는지 검토한 결과, Simple Broker는 해당 서버에 연결된 사용자에게만 메시지를 전달했습니다.</p><p>기존 연결은 유지하고 Redis Pub/Sub을 추가해 각 서버가 같은 채널에서 메시지를 받아 연결된 사용자에게 전달하도록 했습니다. Pub/Sub에는 대화 기록이 남지 않아 메시지를 MySQL에 먼저 저장하고 재접속 시 API로 이력을 조회하도록 했습니다.</p></div></div></section>
     <section class="detail-section"><h3>구현과 결과</h3><div class="case-grid">
@@ -472,6 +480,8 @@
     <div class="project-dialog-content">
     <div class="dialog-head"><div><span class="kicker">CHECKOUT SYSTEM</span><h2 id="payment-title">nbc-checkout-system</h2></div><form method="dialog"><button class="dialog-close" aria-label="상세 팝업 닫기">×</button></form></div>
     <p class="dialog-project-meta">26.05–26.06 · 3주 · 4인 · 주문·장바구니·결제 커머스 백엔드</p>
+    <p class="dialog-project-stack">Java · Spring Boot · JPA · MySQL · PortOne API</p>
+    <figure class="dialog-visual"><img src="assets/payment-confirm.png" alt="Postman 결제 승인 요청 및 응답 화면"><figcaption>외부 결제 승인 API 요청과 응답 확인</figcaption></figure>
     <section class="detail-section"><h3>담당 범위와 결제 흐름</h3><p>결제와 포인트 도메인을 담당했습니다. 외부 결제 정보를 내부 주문과 대조하고, 외부 조회는 DB 트랜잭션 밖에서 수행했습니다. 결제 실패 시 상태 변경과 재고 복구는 한 트랜잭션으로 처리했습니다.</p><div class="nodes"><span class="node">외부 결제 조회</span><span class="arrow">→</span><span class="node mine">주문 정보 대조</span><span class="arrow">→</span><span class="node mine">처리 대기 확인</span><span class="arrow">→</span><span class="node">결과 반영</span></div></section>
     <section class="detail-section"><h3>문제와 선택</h3><article class="card api-card"><h4>외부 결제 조회와 DB 트랜잭션 분리</h4><dl class="api-grid"><dt>요구사항</dt><dd>외부 결제 결과를 확인한 뒤 내부 결제 상태와 재고에 반영</dd><dt>트랜잭션 범위</dt><dd>외부 응답을 기다리는 구간은 제외하고 함께 반영할 DB 변경을 하나로 묶음</dd><dt>중복 위험</dt><dd>재요청이나 웹훅으로 같은 실패 결과가 들어오면 재고 복구가 반복될 수 있음</dd><dt>결정</dt><dd>외부 조회 후 별도 서비스의 트랜잭션에서 결과를 반영하고 실패 처리는 PENDING 상태로 제한</dd></dl></article><div class="proof"><strong>선택 과정</strong><div class="proof-copy"><p>DB 조회와 외부 API 호출을 하나의 트랜잭션으로 묶으면 외부 응답을 기다리는 동안 DB 연결을 점유할 수 있습니다. 응답이 느리고 동시 요청이 늘면 다른 요청이 DB 연결을 기다릴 수 있어, 외부 조회는 트랜잭션 밖에서 하고 결과를 반영하는 DB 작업만 별도 트랜잭션으로 묶었습니다.</p><p>결제 실패 시 결제 상태 변경과 재고 복구도 하나의 트랜잭션으로 묶어 두 작업이 함께 반영되거나 함께 롤백되도록 했습니다.</p></div></div></section>
     <section class="detail-section"><h3>구현과 결과</h3><div class="case-grid">
