@@ -22,7 +22,7 @@ const path = require('node:path');
   await page.waitForFunction(() => getComputedStyle(document.getElementById('contact-status')).opacity === '1');
   await page.waitForFunction(() => document.getElementById('contact-status').textContent === '');
   assert.equal(await page.locator('a[href^="mailto:"]').count(), 0);
-  assert.equal(await page.locator('.contact-action[href]').getAttribute('href'), 'https://github.com/minkim11');
+  assert.equal(await page.locator('.contact-list .contact-action[href]').getAttribute('href'), 'https://github.com/minkim11');
   await page.evaluate(() => {
     navigator.clipboard.writeText = async () => { throw new Error('Permission denied'); };
   });
@@ -36,6 +36,8 @@ const path = require('node:path');
   await page.waitForFunction(() => document.getElementById('contact-status').textContent.includes('직접 복사'));
   assert.equal(await page.locator('textarea').count(), 0);
   await page.reload();
+  assert.equal(await page.locator('#skills .star-tooltip, #skills button, #skills [aria-describedby]').count(), 0);
+  assert.equal(await page.locator('#skills .photo-star').count(), 7);
   console.log('PASS email copy on file URL, keyboard fallback, denied-copy feedback, GitHub link');
   for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: 960 });
@@ -45,7 +47,7 @@ const path = require('node:path');
     assert(projects[0] < projects[1] && projects[1] < projects[2]);
     assert.equal(await page.locator('.constellation-lines polyline').count(), 2);
     assert.equal(await page.locator('.constellation-lines circle').count(), 4);
-    for (const trigger of await page.locator('.star-trigger').all()) {
+    for (const trigger of await page.locator('.project-summary .star-trigger').all()) {
       await trigger.focus();
       const tooltip = page.locator('#' + await trigger.getAttribute('aria-describedby'));
       await page.waitForTimeout(180);
