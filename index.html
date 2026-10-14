@@ -7,12 +7,12 @@
   <title>김민혁 · Backend Portfolio</title>
   <style>
     :root {
-      --main: #495057;
+      --main: #0c101f;
       --main-soft: rgba(255, 255, 255, .10);
       --ink: #ffffff;
       --muted: rgba(255, 255, 255, .72);
       --line: rgba(255, 255, 255, .24);
-      --paper: #495057;
+      --paper: #03050b;
       --surface: rgba(255, 255, 255, .07);
       --white: #ffffff;
       --black: #ffffff;
@@ -321,14 +321,17 @@
     .site-nav-list a:hover, .site-nav-list a:focus-visible { color: var(--white); text-decoration: underline; text-underline-offset: 5px; }
     .portfolio-main { width: min(1020px, calc(100% - 48px)); margin: 0 auto; padding: 0; }
     .hero { padding: 88px 0 70px; border-bottom: 1px solid var(--line); }
-    .hero h1 { margin: 14px 0 18px; font-size: clamp(4rem, 10vw, 7rem); line-height: 1; letter-spacing: -.07em; }
+    .hero h1 { margin: 14px 0 18px; font-size: clamp(3.5rem, 8vw, 5.75rem); font-weight: 500; line-height: 1; letter-spacing: -.025em; }
     .hero .lead { max-width: 700px; margin-bottom: 0; color: var(--muted); }
     .hero .lead + .lead { margin-top: 1.2em; }
     .contact-list { display: flex; flex-wrap: wrap; gap: 18px 42px; margin: 38px 0 0; }
-    .contact-list div { min-width: 150px; }
-    .contact-list dt { margin-bottom: 4px; color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .14em; }
-    .contact-list dd { margin: 0; font-size: .92rem; font-weight: 700; }
-    .contact-list a { color: var(--white); text-underline-offset: 4px; }
+    .contact-action { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--white); font: inherit; font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-decoration: none; cursor: pointer; }
+    .contact-action svg { width: 22px; height: 22px; flex: 0 0 22px; }
+    .contact-action:hover { color: #c2c9ed; }
+    .contact-action:focus-visible { outline: 1px solid #b9c5ef; outline-offset: 6px; border-radius: 4px; }
+    .contact-status { min-height: 1.7em; margin: 8px 0 0; color: #c2c9ed; font-size: .85rem; }
+    .contact-status.is-copied { animation: contact-fade 1s ease .5s forwards; }
+    @keyframes contact-fade { from { opacity: 1; } to { opacity: 0; } }
     .portfolio-section { padding: 64px 0 72px; border-bottom: 1px solid var(--line); scroll-margin-top: 84px; }
     .section-head { margin-bottom: 28px; }
     .section-head h2 { margin-top: 8px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
@@ -388,6 +391,66 @@
       .site-nav-list { gap: 14px; }
       .site-nav-list a { font-size: .75rem; }
     }
+    /* The sky and forest scroll in the same document coordinates. */
+    body { position: relative; isolation: isolate; }
+    body::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, #03050b, #070914 65%, #0c0d18); mask-image: linear-gradient(to bottom, #000 calc(100% - 500px), transparent calc(100% - 120px)); -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 500px), transparent calc(100% - 120px)); }
+    /* Keep distant corner stars dimmer than the skill and project stars. */
+    body::after { content: ""; position: absolute; inset: 0 0 auto; height: clamp(540px, 65vw, 940px); z-index: -1; pointer-events: none; background: url("assets/night-sky-background.png") center top / cover no-repeat; opacity: .22; filter: blur(.35px) brightness(1.5) saturate(.85); mask-image: radial-gradient(ellipse 42% 85% at 0% 0%, #000, transparent 85%), radial-gradient(ellipse 42% 85% at 100% 0%, #000, transparent 85%); -webkit-mask-image: radial-gradient(ellipse 42% 85% at 0% 0%, #000, transparent 85%), radial-gradient(ellipse 42% 85% at 100% 0%, #000, transparent 85%); }
+    .site-header { background: rgba(3,5,11,.86); border: 0; }
+    .hero { padding: 110px 0 78px; border: 0; }
+    .hero .kicker, .section-head .kicker { color: #c2c9ed; }
+    .portfolio-section { border: 0; padding: 50px 0 72px; }
+    .section-head h2 { font-size: .78rem; letter-spacing: .2em; font-weight: 800; }
+    .skill-list { gap: 26px 28px; }
+    .skill-list li { border: 0; padding: 0; font-weight: 500; }
+    .star-item { position: relative; width: fit-content; }
+    .star-trigger { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; color: var(--white); font: inherit; text-decoration: none; border: 0; background: transparent; padding: 0; cursor: pointer; }
+    .star-trigger:focus-visible { outline: 1px solid #b9c5ef; outline-offset: 6px; border-radius: 5px; }
+    .star-hit { display: grid; place-items: center; width: 44px; height: 44px; flex: 0 0 44px; }
+    /* A small window onto a bright star in the original photograph. */
+    .photo-star { display: block; width: 20px; height: 20px; background: url("assets/stars-footer.jpg") -1065px -37px / 1920px 1280px no-repeat; mask-image: radial-gradient(circle, #000 20%, transparent 70%); -webkit-mask-image: radial-gradient(circle, #000 20%, transparent 70%); opacity: .75; filter: brightness(1); transition: opacity .25s, filter .25s, transform .25s; }
+    .project-summary .photo-star { transform: scale(1.3); }
+    .star-trigger:hover .photo-star, .star-trigger:focus-visible .photo-star { opacity: 1; filter: brightness(1.9) drop-shadow(0 0 3px rgba(184,201,255,.8)); transform: scale(1.12); }
+    .project-summary .star-trigger:hover .photo-star, .project-summary .star-trigger:focus-visible .photo-star { transform: scale(1.45); }
+    .star-tooltip { position: absolute; z-index: 10; left: 0; bottom: calc(100% + 10px); width: max-content; max-width: min(320px, calc(100vw - 32px)); padding: 12px 16px; border: 1px solid rgba(180,193,231,.24); border-radius: 10px; background: rgba(12,16,31,.98); box-shadow: 0 12px 30px rgba(0,0,0,.3); color: #e0e4f0; font-size: .85rem; font-weight: 400; line-height: 1.7; opacity: 0; visibility: hidden; transition: opacity .15s; }
+    .star-item:hover > .star-tooltip, .star-item:focus-within > .star-tooltip { opacity: 1; visibility: visible; }
+    .star-tooltip::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 12px; }
+    .tooltip-below > .star-tooltip::after { top: auto; bottom: 100%; }
+    .star-item.tooltip-dismissed > .star-tooltip { opacity: 0; visibility: hidden; }
+    .project-list { position: relative; display: grid; grid-auto-rows: 190px; padding: 25px 0; border: 0; }
+    .project-summary { display: flex; position: relative; align-self: center; margin-left: 7%; padding: 0; border: 0; width: fit-content; max-width: 90%; }
+    .project-summary:nth-of-type(6n + 2) { margin-left: 63%; }
+    .project-summary:nth-of-type(6n + 3) { margin-left: 32%; }
+    .project-summary:nth-of-type(6n + 4) { margin-left: 16%; }
+    .project-summary:nth-of-type(6n + 5) { margin-left: 56%; }
+    .project-summary:nth-of-type(6n + 6) { margin-left: 39%; }
+    .project-summary h3 { font-size: 1.06rem; font-weight: 500; overflow-wrap: anywhere; }
+    .constellation-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+    .constellation-lines g { opacity: .12; transition: opacity .25s; }
+    .constellation-lines polyline { fill: none; stroke: #aebee9; stroke-width: .7; }
+    .constellation-lines circle { fill: #cbd5f2; }
+    .constellation-lines g.is-active { opacity: .55; }
+    /* Fade the photograph into the same sky instead of a solid-color boundary. */
+    .night-footer { position: relative; z-index: -1; width: 100%; margin-top: -300px; height: clamp(640px, 66vw, 1000px); overflow: hidden; }
+    .night-footer img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center bottom; mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.12) 20%, rgba(0,0,0,.6) 48%, #000 72%); -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.12) 20%, rgba(0,0,0,.6) 48%, #000 72%); }
+    @media (max-width: 700px) {
+      .hero { padding: 70px 0 52px; }
+      .skill-list { gap: 22px 10px; }
+      .star-trigger { gap: 6px; }
+      .project-list { grid-auto-rows: 180px; }
+      .project-summary { margin-left: 2%; max-width: 96%; }
+      .project-summary:nth-of-type(6n + 2) { margin-left: 40%; }
+      .project-summary:nth-of-type(6n + 3) { margin-left: 12%; }
+      .project-summary:nth-of-type(6n + 4) { margin-left: 6%; }
+      .project-summary:nth-of-type(6n + 5) { margin-left: 33%; }
+      .project-summary:nth-of-type(6n + 6) { margin-left: 18%; }
+      .project-summary h3 { font-size: .94rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .photo-star, .star-tooltip, .constellation-lines g { transition: none; }
+      .contact-status.is-copied { animation-duration: 1ms; }
+    }
   </style>
 </head>
 <body>
@@ -408,37 +471,52 @@
       <h1>김민혁</h1>
       <p class="lead">제가 짠 코드가 처음 제대로 동작하면 희열을 느낍니다. 공들여 만든 기능을 보고 있으면 자식 키우는 마음이 이런 걸까 싶습니다. 기대한 대로 끝까지 움직이는지 확인하고 나서야 마음이 놓입니다.</p>
       <p class="lead">안정적인 서비스를 개발하는 것을 목표로 Java와 Spring을 공부하고 있습니다. 배운 내용을 직접 구현해보며 기본기를 다지는 중입니다.</p>
-      <dl class="contact-list">
-        <div><dt>EMAIL</dt><dd><a href="mailto:minhykkimm@gmail.com">minhykkimm@gmail.com</a></dd></div>
-        <div><dt>GITHUB</dt><dd><a href="https://github.com/minkim11">github.com/minkim11</a></dd></div>
-      </dl>
+      <div class="contact-list" role="group" aria-label="연락처">
+        <button class="contact-action" id="copy-email" type="button" data-email="minhykkimm@gmail.com" aria-label="이메일 주소 복사: minhykkimm@gmail.com" title="minhykkimm@gmail.com 복사">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 6 9 7 9-7"/></svg>
+          EMAIL <span aria-hidden="true">↗</span>
+        </button>
+        <a class="contact-action" href="https://github.com/minkim11" aria-label="GitHub: minkim11" title="github.com/minkim11">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.08c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.72 1.15 1.72 1.15 1 1.71 2.63 1.22 3.27.93.1-.72.4-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.57 0-1.23.44-2.24 1.15-3.03-.12-.29-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15a10.68 10.68 0 0 1 5.62 0c2.14-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.69.11 2.98.71.79 1.15 1.8 1.15 3.03 0 4.33-2.64 5.29-5.15 5.57.4.35.76 1.03.76 2.08v3.09c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z"/></svg>
+          GITHUB <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
     </section>
 
     <section class="portfolio-section" id="skills">
-      <header class="section-head"><span class="kicker">SKILLS</span><h2>기술 스택</h2></header>
+      <header class="section-head"><h2 class="kicker">SKILLS</h2></header>
       <ul class="skill-list">
-        <li>Java</li><li>Spring Boot</li><li>MySQL</li><li>Redis</li><li>Git</li><li>Docker</li><li>AWS</li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="java-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>Java</button><span class="star-tooltip" id="java-tip" role="tooltip">백엔드 핵심 로직 구현</span></li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="spring-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>Spring Boot</button><span class="star-tooltip" id="spring-tip" role="tooltip">REST API·인증/권한 구성</span></li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="mysql-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>MySQL</button><span class="star-tooltip" id="mysql-tip" role="tooltip">관계형 데이터와 트랜잭션</span></li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="redis-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>Redis</button><span class="star-tooltip" id="redis-tip" role="tooltip">Pub/Sub 기반 메시지 전달</span></li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="git-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>Git</button><span class="star-tooltip" id="git-tip" role="tooltip">버전 관리와 협업</span></li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="docker-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>Docker</button><span class="star-tooltip" id="docker-tip" role="tooltip">실행 환경 컨테이너화</span></li>
+        <li class="star-item"><button class="star-trigger" type="button" aria-describedby="aws-tip"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span>AWS</button><span class="star-tooltip" id="aws-tip" role="tooltip">서비스 배포 환경 구성</span></li>
       </ul>
     </section>
 
     <section class="portfolio-section" id="projects">
-      <header class="section-head"><span class="kicker">PROJECTS</span><h2>프로젝트</h2></header>
+      <header class="section-head"><h2 class="kicker">PROJECTS</h2></header>
       <div class="project-list">
-        <article class="project-summary">
-          <div><h3>로컬스탬프</h3><p>지역 행사와 체험을 예약하는 서비스 · 인증·회원, 쿠폰, 행사 운영자</p><span class="project-meta">26.07–26.08 · 6주 · 4인</span></div>
-          <a class="project-open" href="#localstamp-detail" aria-haspopup="dialog" aria-controls="localstamp-detail">상세 보기 →</a>
+        <svg class="constellation-lines" aria-hidden="true"></svg>
+        <article class="project-summary star-item">
+          <a class="star-trigger" href="#localstamp-detail" aria-label="로컬스탬프 상세 보기" aria-describedby="localstamp-tip" aria-haspopup="dialog" aria-controls="localstamp-detail"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span><h3>로컬스탬프</h3></a>
+          <span class="star-tooltip" id="localstamp-tip" role="tooltip">지역 행사와 체험을 예약하는 서비스<br>인증·회원, 쿠폰, 후기<br>26.07–26.08 · 6주 · 4인</span>
         </article>
-        <article class="project-summary">
-          <div><h3>gifbottary</h3><p>기프티콘 거래 서비스 · 실시간 채팅, 쿠폰</p><span class="project-meta">26.06–26.07 · 2주 · 4인</span></div>
-          <a class="project-open" href="#gifbottary-detail" aria-haspopup="dialog" aria-controls="gifbottary-detail">상세 보기 →</a>
+        <article class="project-summary star-item">
+          <a class="star-trigger" href="#gifbottary-detail" aria-label="gifbottary 상세 보기" aria-describedby="gifbottary-tip" aria-haspopup="dialog" aria-controls="gifbottary-detail"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span><h3>gifbottary</h3></a>
+          <span class="star-tooltip" id="gifbottary-tip" role="tooltip">기프티콘 거래 서비스<br>실시간 채팅, 쿠폰<br>26.06–26.07 · 2주 · 4인</span>
         </article>
-        <article class="project-summary">
-          <div><h3>nbc-checkout-system</h3><p>주문·장바구니·결제 커머스 백엔드 · 결제, 포인트</p><span class="project-meta">26.05–26.06 · 3주 · 4인</span></div>
-          <a class="project-open" href="#payment-detail" aria-haspopup="dialog" aria-controls="payment-detail">상세 보기 →</a>
+        <article class="project-summary star-item">
+          <a class="star-trigger" href="#payment-detail" aria-label="nbc-checkout-system 상세 보기" aria-describedby="payment-tip" aria-haspopup="dialog" aria-controls="payment-detail"><span class="star-hit" aria-hidden="true"><span class="photo-star"></span></span><h3>nbc-checkout-system</h3></a>
+          <span class="star-tooltip" id="payment-tip" role="tooltip">주문·장바구니·결제 커머스 백엔드<br>결제, 포인트<br>26.05–26.06 · 3주 · 4인</span>
         </article>
       </div>
     </section>
   </main>
+  <footer class="night-footer" aria-hidden="true"><img src="assets/stars-footer.jpg" alt="" loading="lazy"></footer>
 
   <dialog class="project-dialog" id="localstamp-detail" aria-labelledby="localstamp-title">
     <div class="project-dialog-content">
@@ -494,6 +572,108 @@
     </div>
   </dialog>
   <script>
+    const emailButton = document.getElementById('copy-email');
+    const contactStatus = document.getElementById('contact-status');
+    contactStatus.addEventListener('animationend', () => {
+      if (contactStatus.classList.contains('is-copied')) {
+        contactStatus.textContent = '';
+        contactStatus.classList.remove('is-copied');
+      }
+    });
+    emailButton.addEventListener('click', async () => {
+      const email = emailButton.dataset.email;
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(email);
+        copied = true;
+      } catch {
+        // Local files and browsers denying Clipboard API can still allow a user-initiated copy.
+        const field = document.createElement('textarea');
+        field.value = email;
+        field.readOnly = true;
+        field.style.cssText = 'position:fixed;top:0;left:-9999px;';
+        document.body.append(field);
+        field.select();
+        try { copied = document.execCommand('copy'); } catch { copied = false; }
+        field.remove();
+        emailButton.focus({ preventScroll: true });
+      }
+      contactStatus.classList.remove('is-copied');
+      contactStatus.textContent = copied ? '이메일 주소를 복사했습니다.' : `복사하지 못했습니다. 주소를 직접 복사해 주세요: ${email}`;
+      if (copied) {
+        void contactStatus.offsetWidth; // Restart the fade after another successful copy.
+        contactStatus.classList.add('is-copied');
+      }
+    });
+    const constellation = document.querySelector('.project-list');
+    const lines = constellation.querySelector('.constellation-lines');
+    let activeProject = null;
+    function highlightConnections() {
+      const projects = [...constellation.querySelectorAll('.project-summary')];
+      const index = projects.indexOf(activeProject);
+      [...lines.children].forEach((line, i) => line.classList.toggle('is-active', index >= 0 && (i === index || i === index - 1)));
+    }
+    function drawConstellation() {
+      const bounds = constellation.getBoundingClientRect();
+      const stars = [...constellation.querySelectorAll('.photo-star')].map((star) => {
+        const rect = star.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2 - bounds.left, y: rect.top + rect.height / 2 - bounds.top };
+      });
+      lines.setAttribute('viewBox', `0 0 ${bounds.width} ${bounds.height}`);
+      lines.replaceChildren(...stars.slice(1).map((star, i) => {
+        const svgNamespace = 'http://www.w3.org/2000/svg';
+        const group = document.createElementNS(svgNamespace, 'g');
+        const start = stars[i];
+        const bend = Math.min(28, bounds.width * .035) * (i % 2 ? -1 : 1);
+        const points = [start, { x: start.x + (star.x - start.x) * .34 + bend, y: start.y + (star.y - start.y) * .34 }, { x: start.x + (star.x - start.x) * .7 - bend, y: start.y + (star.y - start.y) * .7 }, star];
+        const line = document.createElementNS(svgNamespace, 'polyline');
+        line.setAttribute('points', points.map(point => `${point.x},${point.y}`).join(' '));
+        group.append(line);
+        points.slice(1, -1).forEach(point => {
+          const dot = document.createElementNS(svgNamespace, 'circle');
+          dot.setAttribute('cx', point.x);
+          dot.setAttribute('cy', point.y);
+          dot.setAttribute('r', '1.4');
+          group.append(dot);
+        });
+        return group;
+      }));
+      highlightConnections();
+    }
+    new ResizeObserver(drawConstellation).observe(constellation);
+    new MutationObserver(drawConstellation).observe(constellation, { childList: true });
+    constellation.addEventListener('pointerover', (event) => { activeProject = event.target.closest('.project-summary'); highlightConnections(); });
+    constellation.addEventListener('pointerleave', () => { activeProject = document.activeElement.closest('.project-summary'); highlightConnections(); });
+    constellation.addEventListener('focusin', (event) => { activeProject = event.target.closest('.project-summary'); highlightConnections(); });
+    constellation.addEventListener('focusout', (event) => { activeProject = event.relatedTarget?.closest('.project-summary'); highlightConnections(); });
+
+    function positionTooltip(item) {
+      const tooltip = item.querySelector('.star-tooltip');
+      item.classList.remove('tooltip-below');
+      tooltip.style.top = 'auto';
+      tooltip.style.bottom = 'calc(100% + 10px)';
+      tooltip.style.left = '0px';
+      const rect = tooltip.getBoundingClientRect();
+      const shift = Math.max(16 - rect.left, Math.min(0, window.innerWidth - 16 - rect.right));
+      tooltip.style.left = `${shift}px`;
+      if (rect.top < document.querySelector('.site-header').getBoundingClientRect().bottom + 8) {
+        item.classList.add('tooltip-below');
+        tooltip.style.top = 'calc(100% + 10px)';
+        tooltip.style.bottom = 'auto';
+      }
+    }
+    document.querySelectorAll('.star-item').forEach((item) => {
+      const showTooltip = () => { item.classList.remove('tooltip-dismissed'); positionTooltip(item); };
+      item.addEventListener('pointerenter', showTooltip);
+      item.addEventListener('focusin', showTooltip);
+    });
+    window.addEventListener('resize', () => document.querySelectorAll('.star-item').forEach(positionTooltip));
+    window.addEventListener('scroll', () => document.querySelectorAll('.star-item:hover, .star-item:focus-within').forEach(positionTooltip), { passive: true });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') document.querySelectorAll('.star-item').forEach((item) => item.classList.add('tooltip-dismissed'));
+    });
+    drawConstellation();
+    document.querySelectorAll('.star-item').forEach(positionTooltip);
     const projectDialogs = [...document.querySelectorAll('.project-dialog')];
 
     function openProjectFromHash() {
